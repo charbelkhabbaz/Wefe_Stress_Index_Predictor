@@ -30,16 +30,20 @@ This project provides an interactive dashboard to:
 
 ```
 wefe_stress_code/
-├── data_processing.py          # Data loading, merging, and stress index calculation
-├── ML.py                        # Linear Regression model training
-├── train_random_forest.py      # Random Forest model training
-├── streamlit_app.py            # Main Streamlit application
-├── visualization.py             # Original visualization code
-├── Litani_WEFE_Stressed_Data.csv    # Processed dataset
-├── linear_regression_model.pkl      # Trained Linear Regression model
-├── random_forest_model.pkl         # Trained Random Forest model
-└── README.md                    # This file
+├── data_processing.py              # Data loading, merging, and stress index calculation
+├── train_models.py                  # Train both models and create .pkl files (RUN THIS FIRST!)
+├── streamlit_app.py                  # Main Streamlit application
+├── visualization.py                  # Original visualization code
+├── Linear_Regression_Model.py        # Individual Linear Regression training (optional)
+├── Random_Forest_Model.py             # Individual Random Forest training (optional)
+├── Litani_WEFE_Stressed_Data.csv    # Processed dataset (generated)
+├── linear_regression_model.pkl       # Trained model (generated, not in repo)
+├── random_forest_model.pkl           # Trained model (generated, not in repo)
+├── .gitignore                        # Excludes .pkl files from git
+└── README.md                         # This file
 ```
+
+**Note:** `.pkl` model files are excluded from the repository via `.gitignore`. Users must run `train_models.py` to generate them locally.
 
 ## Prerequisites
 
@@ -79,21 +83,26 @@ python data_processing.py
 
 This will create `Litani_WEFE_Stressed_Data.csv`.
 
-### Step 2: Train the Models (if needed)
+### Step 2: Train the Models (Required - Run First!)
 
-**Train Linear Regression model:**
+**⚠️ Important:** Model files (`.pkl`) are not included in this repository due to their large size. You must train them locally before running the Streamlit app.
+
+Run the training script to create both model files:
+
 ```bash
-python ML.py
+python train_models.py
 ```
 
-**Train Random Forest model:**
-```bash
-python train_random_forest.py
-```
+This will:
+- Train both Linear Regression and Random Forest models
+- Save `linear_regression_model.pkl` (~0 MB)
+- Save `random_forest_model.pkl` (~89 MB)
 
-This will create `linear_regression_model.pkl` and `random_forest_model.pkl`.
+**Note:** Training takes a few minutes. The Random Forest model is large (~89 MB) and cannot be uploaded to GitHub.
 
 ### Step 3: Run the Streamlit App
+
+After training the models, run the Streamlit application:
 
 ```bash
 streamlit run streamlit_app.py
@@ -153,8 +162,18 @@ The stress index is calculated using:
 ## Troubleshooting
 
 **Error: Model file not found**
-- Run `python train_random_forest.py` to regenerate the Random Forest model
-- Run `python ML.py` to regenerate the Linear Regression model
+- **Solution:** Run `python train_models.py` to generate both model files
+- This script trains and saves both Linear Regression and Random Forest models
+- Make sure you've run `python data_processing.py` first to create the input data file
+
+**Error: File too large for GitHub**
+- Model files (`.pkl`) are intentionally excluded via `.gitignore`
+- This is normal - trained models are large binary files (~89 MB for Random Forest)
+- Users should train models locally using `train_models.py`
+
+**Error: Data file not found**
+- Ensure all CSV data files are in the project directory
+- Run `python data_processing.py` to generate the processed dataset
 
 **Error: Data file not found**
 - Ensure all CSV data files are in the project directory
